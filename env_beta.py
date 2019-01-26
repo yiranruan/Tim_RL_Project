@@ -218,10 +218,10 @@ class Maze:
         return s_, reward, done
 
 
-if __name__ == '__main__':
-    env = Maze(mode=2, x_real=3, y_real=3)
-    # print(env.step_02(0))
-    # print(env.step_02(1))
-    # print(env.step_02(2))
-    # print(env.step_02(3))
-    # print(env.reset())
+# if __name__ == '__main__':
+#     env = Maze(mode=2, x_real=3, y_real=3)
+#     print(env.step_02(0))
+#     # print(env.step_02(1))
+#     # print(env.step_02(2))
+#     # print(env.step_02(3))
+#     # print(env.reset())
