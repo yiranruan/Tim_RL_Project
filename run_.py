@@ -1,21 +1,8 @@
 from envR import envR
-from RL_brain import QLearningTable
+from RL_brain import DeepQNetwork
 
 def update():
-    for episode in range(100):
-        s = env.reset()
-        
-        while True:
-            # env.render()
-            print("This is",episode)
-            action = RL.choose_action(str(s))
-
-            s_, reward, done = env.step(action_translate(action))
-            RL.learn(str(s), action, reward, str(s_), done)
-            s = s_
-            if done:
-                break
-    print('Game Over!')
+    pass
 
 def action_translate(action):
     if action == 0:
@@ -29,7 +16,36 @@ def action_translate(action):
 
 if __name__ == "__main__":
     env = envR()
-    RL = QLearningTable(actions = list(range(env.n_actions)))
+    RL = DeepQNetwork(env.n_actions, env.n_features,
+                      learning_rate=0.01,
+                      reward_decay=0.9,
+                      e_greedy=0.9,
+                      replace_target_iter=200,
+                      memory_size=2000,
+                      # output_graph=True
+                      )
 
-    update()
+    step = 0
+    for episode in range(300):
+        observation = env.reset()
+        
+        while True:
+            # env.render()
+            print("This is", episode)
+
+            action = RL.choose_action(observation)
+
+            observation_, reward, done = env.step(action_translate(action))
+
+            RL.store_transition(observation, action, reward, observation_)
+            
+            if (step >200) and (step % 5 == 0):
+                RL.learn()
+            
+            observation = observation_
+
+            if done:
+                break
+            step += 1
+    print('Game Over!')
     # env.after(100, update)

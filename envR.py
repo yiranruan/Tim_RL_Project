@@ -1,6 +1,7 @@
 from Maze import generateMaze
 from Maze import copy_grid
 import random,sys,time
+import numpy as np
 
 seed = None
 class envR:
@@ -10,14 +11,14 @@ class envR:
                 ):
         self.action_space  = ['u', 'd', 'l', 'r']
         self.n_actions = len(self.action_space)
-
+        self.n_features = 2
         seed = None
         if len(sys.argv) > 1:
             seed = int(sys.argv[1])
         self.maze = generateMaze(seed)
-        self.backup_maze = generateMaze(seed)
+        # self.backup_maze = generateMaze(seed)
         self.grid = copy_grid(self.maze.grid)
-        self.agent = self.maze.get_start()
+        # self.agent = self.maze.get_start()
         self.total_cost = 0
         self.real = self.maze.get_real_goal()
         self.fake = self.maze.get_fake_goal()
@@ -25,15 +26,15 @@ class envR:
     def reset(self):
         self.agent = self.maze.get_start()
         self.total_cost = 0
-        self.maze = generateMaze(seed)
+
         self.maze.grid = self.grid
-        return self.agent #!!!
+        return np.array(self.agent) #!!!
 
     def update_map(self, s, s_):
         self.maze.pass_by(s)
         self.maze.next_step(s_)
         print(str(self.maze))
-        # time.sleep(0.3)
+        # time.sleep(1)
 
     def step(self, action):
         row, col = self.agent
@@ -49,11 +50,12 @@ class envR:
             if self.maze.isWall(row, col+1):s_ = (row, col+1)
         if self.maze.isTerminal(s_): done = True
         reward = self.maze.get_reward(s_)
+        print("tut",action, self.agent, s_)
         self.total_cost += reward
         self.update_map(self.agent, s_)
         self.agent = s_
         self.maze.set_position(s_)
-        return s_, reward, done
+        return np.array(s_), reward, done
 
 # if __name__ == '__main__':
 #     env = envR()

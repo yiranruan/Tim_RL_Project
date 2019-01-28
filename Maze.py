@@ -57,39 +57,40 @@ class Maze:
         """
         add a wall with gaps
         """
-        add_r, add_c = self.anchor
-        if vert:
-            gaps = min(self.r, gaps)
-            slots = [add_r+x for x in range(self.r)]
-            if not 0 in slots:
-                if self.root.grid[min(slots)-1][add_c+i] == E: slots.remove(min(slots))
-                if len(slots) <= gaps: return 0
-            if not self.root.c-1 in slots:
-                if self.root.grid[max(slots)+1][add_c+i] == E: slots.remove(max(slots))
-            if len(slots) <= gaps: return 0
-            random.shuffle(slots)
-            for row in slots[int(round(gaps)):]:
-                self.root.grid[row][add_c+i] = W
-            self.rooms.append(Maze(self.r, i, (add_r,add_c), self.root))
-            self.rooms.append(Maze(self.r, self.c-i-1, (add_r,add_c+i+1), self.root))
-        else:
-            gaps = min(self.c, gaps)
-            slots = [add_c+x for x in range(self.c)]
-            if not 0 in slots:
-                if self.root.grid[add_r+i][min(slots)-1] == E: slots.remove(min(slots))
-                if len(slots) <= gaps: return 0
-            if not self.root.r-1 in slots:
-                if self.root.grid[add_r+i][max(slots)+1] == E: slots.remove(max(slots))
-            if len(slots) <= gaps: return 0
-            random.shuffle(slots)
-            for col in slots[int(round(gaps)):]:
-                self.root.grid[add_r+i][col] = W
-            self.rooms.append(Maze(i, self.c, (add_r,add_c), self.root))
-            self.rooms.append(Maze(self.r-i-1, self.c, (add_r+i+1,add_c), self.root))
+        pass
+        # add_r, add_c = self.anchor
+        # if vert:
+        #     gaps = min(self.r, gaps)
+        #     slots = [add_r+x for x in range(self.r)]
+        #     if not 0 in slots:
+        #         if self.root.grid[min(slots)-1][add_c+i] == E: slots.remove(min(slots))
+        #         if len(slots) <= gaps: return 0
+        #     if not self.root.c-1 in slots:
+        #         if self.root.grid[max(slots)+1][add_c+i] == E: slots.remove(max(slots))
+        #     if len(slots) <= gaps: return 0
+        #     random.shuffle(slots)
+        #     for row in slots[int(round(gaps)):]:
+        #         self.root.grid[row][add_c+i] = W
+        #     self.rooms.append(Maze(self.r, i, (add_r,add_c), self.root))
+        #     self.rooms.append(Maze(self.r, self.c-i-1, (add_r,add_c+i+1), self.root))
+        # else:
+        #     gaps = min(self.c, gaps)
+        #     slots = [add_c+x for x in range(self.c)]
+        #     if not 0 in slots:
+        #         if self.root.grid[add_r+i][min(slots)-1] == E: slots.remove(min(slots))
+        #         if len(slots) <= gaps: return 0
+        #     if not self.root.r-1 in slots:
+        #         if self.root.grid[add_r+i][max(slots)+1] == E: slots.remove(max(slots))
+        #     if len(slots) <= gaps: return 0
+        #     random.shuffle(slots)
+        #     for col in slots[int(round(gaps)):]:
+        #         self.root.grid[add_r+i][col] = W
+        #     self.rooms.append(Maze(i, self.c, (add_r,add_c), self.root))
+        #     self.rooms.append(Maze(self.r-i-1, self.c, (add_r+i+1,add_c), self.root))
 
-        return 1
+        # return 1
     
-    def add_pacman_stuff(self, max_food=1, max_capsules=4, toskip=0):
+    def add_pacman_stuff(self, max_food=2, max_capsules=4, toskip=0):
         """
         add pacmen starting position
         add food at dead ends plus some extra
@@ -123,6 +124,8 @@ class Maze:
         ## starting pacmen positions
         self.grid[self.r-2][1] = 'P'
         self.position = (self.r-2, 1)
+        # self.grid[self.r-2][1] = 'P'
+        # self.position = (self.r-2, 1)
         # ========================1.25========================
         # self.grid[self.r-3][1] = '1'
         # self.grid[1][self.c-2] = C #----->fixed food
@@ -147,12 +150,15 @@ class Maze:
             if (row > self.r-6) and (col < 6): continue
             if(abs(col - self.c/2) < 3): continue
             if self.grid[row][col] == E:
-                self.grid[row][col] = F
-                self.grid[self.r-row-1][self.c-(col)-1] = F #中心对称，如果使用 total_food += 2
+                self.grid[row][col] = 'H'
+                self.grid[self.r-row-1][self.c-(col)-1] = C #中心对称，如果使用 total_food += 2
                 #food list ----> food object
                 self.food_list.append(food((row,col)))
                 self.food_list.append(food((self.r-row-1,self.c-(col)-1)))
+                print('foodlist1',row,col)
+                print('foodlist2',self.r-row-1,self.c-(col)-1)
                 total_food += 2
+                print('total',total_food)
         self.food_list[0].set_status(True)
         # ========================1.25========================
         #food list
@@ -166,9 +172,9 @@ class Maze:
             print("pos:",pos)
             print("f.get_pos",f.get_pos())
             if f.get_pos() == pos: 
-                self.grid[row][col] = F
+                self.grid[row][col] = 'A'
                 return True
-        self.grid[row][col] = ' '
+        self.grid[row][col] = E
         return False
 
     def next_step(self, pos):
@@ -184,7 +190,7 @@ class Maze:
 
     def get_real_goal(self):
         return self.food_list[0]
-    
+     
     def get_fake_goal(self):
         return self.food_list[1]
     
