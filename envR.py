@@ -17,18 +17,21 @@ class envR:
             seed = int(sys.argv[1])
         self.maze = generateMaze(seed)
         # self.backup_maze = generateMaze(seed)
-        self.grid = copy_grid(self.maze.grid)
+        self.save_grid = copy_grid(self.maze.grid)
         # self.agent = self.maze.get_start()
         self.total_cost = 0
         self.real = self.maze.get_real_goal()
         self.fake = self.maze.get_fake_goal()
 
     def reset(self):
+        # print('reset',self.grid)
+        self.maze.grid = self.save_grid
         self.agent = self.maze.get_start()
         self.total_cost = 0
-
-        self.maze.grid = self.grid
+        self.maze.reset()
         return np.array(self.agent) #!!!
+    # def reset(self):
+    #     return envR()
 
     def update_map(self, s, s_):
         self.maze.pass_by(s)

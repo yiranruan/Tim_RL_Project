@@ -15,6 +15,7 @@ class Maze:
         """
         self.r = rows
         self.c = cols
+        # self.r_s, self.c_s = rows, cols
         self.grid = [[E for col in range(cols)] for row in range(rows)]
         self.anchor = anchor
         self.rooms = []
@@ -22,8 +23,17 @@ class Maze:
         # ========================parameter========================
         self.food_list = []
         self.position = ()
+        self.start = ()
         # ========================parameter========================
         if not self.root: self.root = self
+    
+
+    def reset(self):
+        for f in self.food_list:
+            f.reset()
+            row, col = f.get_pos()
+            self.grid[row][col] = C
+        # self.r, self.c = self.r_s, self.c_s
 
     def to_map(self):
         """
@@ -124,6 +134,7 @@ class Maze:
         ## starting pacmen positions
         self.grid[self.r-2][1] = 'P'
         self.position = (self.r-2, 1)
+        self.start = self.position
         # self.grid[self.r-2][1] = 'P'
         # self.position = (self.r-2, 1)
         # ========================1.25========================
@@ -183,7 +194,7 @@ class Maze:
         self.position = (row, col)
 
     def get_start(self):
-        return self.position
+        return self.start
     
     def set_position(self, pos):
         self.position = pos

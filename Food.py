@@ -1,8 +1,10 @@
 class food:
     def __init__(self, pos, status=False):
         self.status = status
+        self.status_s = status
         self.pos = pos
         self.reward = 10
+        self.reward_s = self.reward
         self.is_visited = False
 
     def get_pos(self):
@@ -10,7 +12,10 @@ class food:
     
     def set_status(self, status):
         self.status = status
-        if self.status and (not self.is_visited): self.reward = -10
+        self.status_s = status
+        if self.status and (not self.is_visited):
+            self.reward = -10
+            self.reward_s = -10
 
     def visited(self):
         self.is_visited = True
@@ -26,9 +31,6 @@ class food:
         return self.status
 
     def reset(self):
-        if self.status:
-            self.reward = -10
-            self.is_visited = False
-        else:
-            self.reward = 10
-            self.is_visited = False
+        self.status = self.status_s
+        self.is_visited = False
+        self.reward = self.reward_s

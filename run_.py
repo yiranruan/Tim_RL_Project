@@ -26,7 +26,7 @@ if __name__ == "__main__":
                       )
 
     step = 0
-    for episode in range(300):
+    for episode in range(1000):
         observation = env.reset()
         
         while True:
