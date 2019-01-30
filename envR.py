@@ -12,26 +12,28 @@ class envR:
         self.action_space  = ['u', 'd', 'l', 'r']
         self.n_actions = len(self.action_space)
         self.n_features = 2
+
         seed = None
         if len(sys.argv) > 1:
             seed = int(sys.argv[1])
         self.maze = generateMaze(seed)
-        # self.backup_maze = generateMaze(seed)
+        print('s:;')
+        print(str(self.maze))
         self.save_grid = copy_grid(self.maze.grid)
-        # self.agent = self.maze.get_start()
+        print('id',(self.save_grid))
         self.total_cost = 0
         self.real = self.maze.get_real_goal()
         self.fake = self.maze.get_fake_goal()
 
     def reset(self):
         # print('reset',self.grid)
-        self.maze.grid = self.save_grid
+        self.maze.grid = copy_grid(self.save_grid)
+        print('sss:',self.save_grid)
+        print('sssdddd:',id(self.maze.grid))
         self.agent = self.maze.get_start()
         self.total_cost = 0
         self.maze.reset()
         return np.array(self.agent) #!!!
-    # def reset(self):
-    #     return envR()
 
     def update_map(self, s, s_):
         self.maze.pass_by(s)
