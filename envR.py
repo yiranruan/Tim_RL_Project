@@ -30,8 +30,8 @@ class envR:
         self.maze.reset()
         return np.array(self.agent) #!!!
 
-    def update_map(self, s, s_, train):
-        self.maze.pass_by(s)
+    def update_map(self, s, a, s_, train):
+        self.maze.pass_by(s, a)
         self.maze.next_step(s_)
         if not train:
             print(str(self.maze))
@@ -66,7 +66,7 @@ class envR:
         reward = self.maze.get_reward(s_)
         # print("tut",action, self.agent, s_)
         self.total_cost += reward
-        self.update_map(self.agent, s_, train)
+        self.update_map(self.agent, action, s_, train)
         self.agent = s_
         self.maze.set_position(s_)
         return np.array(s_), reward, done

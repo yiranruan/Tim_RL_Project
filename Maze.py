@@ -90,7 +90,7 @@ class Maze:
             if (row > self.r-6) and (col < 6): continue
             if(abs(col - self.c/2) < 3): continue
             if self.grid[row][col] == E:
-                self.grid[row][col] = 'H'
+                self.grid[row][col] = C
                 self.grid[self.r-row-1][self.c-(col)-1] = C #中心对称，如果使用 total_food += 2
                 #food list ----> food object
                 self.food_list.append(food((row,col)))
@@ -105,16 +105,26 @@ class Maze:
 
     def getFoodList(self):
         return self.food_list
-
-    def pass_by(self, pos):
+    
+    def action_to_arrow(self, action):
+        if action == 'u':
+            return '↑'
+        elif action == 'd':
+            return '↓'
+        elif action == 'l':
+            return '←'
+        elif action == 'r':
+            return '→'
+    def pass_by(self, pos, action):
         row, col = pos
         for f in self.food_list:
             # print("pos:",pos)
             # print("f.get_pos",f.get_pos())
             if f.get_pos() == pos: 
-                self.grid[row][col] = 'A'
+                self.grid[row][col] = 'R'
                 return True
-        self.grid[row][col] = E
+        arrow = self.action_to_arrow(action)
+        self.grid[row][col] = arrow
         return False
 
     def next_step(self, pos):

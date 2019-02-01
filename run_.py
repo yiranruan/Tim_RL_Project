@@ -23,7 +23,7 @@ if __name__ == "__main__":
                       e_greedy=0.9,
                       replace_target_iter=200,
                       memory_size=2000,
-                      output_graph=True
+                      output_graph=True,
                       )
 
     step = 0
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         env = envR()
         observation = env.reset()
         
-        for i in range(300):
+        for i in range(True):
             # env.render()
             print("This is", episode)
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
             # Take the action (index) that have the maximum expected future reward given that state
             action = RL.choose_action(s, train)
-
+            print(action)
             s_, reward, done = env.step(action_translate(action), train)
             
             if done:
