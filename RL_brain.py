@@ -133,15 +133,20 @@ class DeepQNetwork:
 
         self.memory_counter += 1
 
-    def choose_action(self, observation):
+    def choose_action(self, observation, train):
         observation = observation[np.newaxis, :]
-
-        if np.random.uniform() < self.epsilon:
+        if train == True:
+            if np.random.uniform() < self.epsilon:
+                # forward feed the observation and get q value for every actions
+                actions_value = self.sess.run(self.q_eval, feed_dict={self.s: observation})
+                action = np.argmax(actions_value)
+            else:
+                action = np.random.randint(0, self.n_actions)
+            return action
+        else:
             actions_value = self.sess.run(self.q_eval, feed_dict={self.s: observation})
             action = np.argmax(actions_value)
-        else:
-            action = np.random.randint(0, self.n_actions)
-        return action
+            return action
 
     def learn(self):
         if self.learn_step_counter % self.replace_target_iter == 0:
@@ -161,6 +166,8 @@ class DeepQNetwork:
                 self.s_: batch_memory[:, -self.n_features:],
                 self.s: batch_memory[:, :self.n_features],
             })
+        # print('self.s:',self.s)
+    
 
         q_target = q_eval.copy()
 

@@ -95,10 +95,10 @@ class Maze:
                 #food list ----> food object
                 self.food_list.append(food((row,col)))
                 self.food_list.append(food((self.r-row-1,self.c-(col)-1)))
-                print('foodlist1',row,col)
-                print('foodlist2',self.r-row-1,self.c-(col)-1)
+                # print('foodlist1',row,col)
+                # print('foodlist2',self.r-row-1,self.c-(col)-1)
                 total_food += 2
-                print('total',total_food)
+                # print('total',total_food)
         self.food_list[0].set_status(True)
         # ========================1.25========================
         #food list
@@ -109,8 +109,8 @@ class Maze:
     def pass_by(self, pos):
         row, col = pos
         for f in self.food_list:
-            print("pos:",pos)
-            print("f.get_pos",f.get_pos())
+            # print("pos:",pos)
+            # print("f.get_pos",f.get_pos())
             if f.get_pos() == pos: 
                 self.grid[row][col] = 'A'
                 return True
@@ -140,8 +140,8 @@ class Maze:
     
     def isTerminal(self, pos):
         for i in range(len(self.food_list)):
-            if pos == self.food_list[i].get_pos() and self.food_list[i].get_status(): return True
-            elif pos == self.food_list[i].get_pos() and (not self.food_list[i].get_status()): 
+            if (pos == self.food_list[i].get_pos()) and self.food_list[i].get_status(): return True
+            elif (pos == self.food_list[i].get_pos()) and (not self.food_list[i].get_status()): 
                 self.food_list[i].visited()
                 self.food_list[0].set_reward(10)
                 return False
