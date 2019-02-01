@@ -23,7 +23,7 @@ if __name__ == "__main__":
                       e_greedy=0.9,
                       replace_target_iter=200,
                       memory_size=2000,
-                      output_graph=True,
+                      output_graph=True
                       )
 
     step = 0
@@ -31,13 +31,13 @@ if __name__ == "__main__":
         env = envR()
         observation = env.reset()
         
-        for i in range(True):
+        while True:
             # env.render()
             print("This is", episode)
 
             action = RL.choose_action(observation, train)
 
-            observation_, reward, done = env.step(action_translate(action), False)
+            observation_, reward, done = env.step(action_translate(action), train)
 
             RL.store_transition(observation, action, reward, observation_)
             

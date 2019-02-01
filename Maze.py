@@ -115,6 +115,15 @@ class Maze:
             return '←'
         elif action == 'r':
             return '→'
+        elif action == 'ul':
+            return '↖'
+        elif action == 'dl':
+            return '↙'
+        elif action == 'ur':
+            return '↗'
+        elif action == 'dr':
+            return '↘'
+        
     def pass_by(self, pos, action):
         row, col = pos
         for f in self.food_list:
@@ -163,80 +172,6 @@ class Maze:
         return -1
     
 
-def make_with_prison(room, depth, gaps=1, vert=True, min_width=1, gapfactor=0.5):
-    """
-    Build a maze with 0,1,2 layers of prison (randomly)
-    """
-    p = random.randint(0,2)
-    proll = random.random()
-    if proll < 0.5:
-        p = 1
-    elif proll < 0.7:
-        p = 0
-    elif proll < 0.9:
-        p = 2
-    else:
-        p = 3
-
-    add_r, add_c = room.anchor
-    print(p)
-    for j in range(p):
-        cur_col = 2*(j+1)-1
-        for row in range(room.r):
-            room.root.grid[row][cur_col] = W
-        if j % 2 == 0:
-            room.root.grid[0][cur_col] = E
-
-        else:
-            room.root.grid[room.r-1][cur_col] = E
-
-
-    room.rooms.append(Maze(room.r, room.c-(2*p), (add_r, add_c+(2*p)), room.root))
-    for sub_room in room.rooms:
-
-        make(sub_room, depth+1, gaps, vert, min_width, gapfactor)
-    return 2*p
-
-def make(room, depth, gaps=1, vert=True, min_width=1, gapfactor=0.5):
-    """
-    recursively build a maze
-    TODO: randomize number of gaps?
-    """
-
-    ## extreme base case
-    if room.r <= min_width and room.c <= min_width: return
-
-    ## decide between vertical and horizontal wall
-    if vert: num = room.c
-    else: num = room.r
-    if num < min_width + 2:
-        vert = not vert
-        if vert: num = room.c
-        else: num = room.r
-
-    ## add a wall to the current room
-    if depth==0: 
-        wall_slots = [num-2]    ## fix the first wall
-    else: 
-        wall_slots = range(1, num-1)
-
-    if len(wall_slots) == 0: return
-    choice = random.choice(wall_slots)
-    if not room.add_wall(choice, gaps, vert): return
-
-    ## recursively add walls
-    # if random.random() < 0.8:
-    #         vert = not vert
-
-
-    for sub_room in room.rooms:
-        make(sub_room, depth+1, max(1,gaps*gapfactor), not vert,
-                 min_width, gapfactor)
-
-                 
-    # for sub_room in room.rooms:
-    #         make(sub_room, depth+1, max(1,gaps/2), not vert, min_width)
-
 def copy_grid(grid):
     new_grid = []
     for row in range(len(grid)):
@@ -253,9 +188,7 @@ def generateMaze(seed = None):
     if not seed:
         seed = random.randint(1,MAX_DIFFERENT_MAZES)
     random.seed(seed)
-    maze = Maze(16,16)
-    # gapfactor = min(0.65,random.gauss(0.5,0.1))
-    # skip = make_with_prison(maze, depth=0, gaps=3, vert=True, min_width=1, gapfactor=gapfactor)
+    maze = Maze(19,19)
     maze.to_map()
     maze.add_pacman_stuff(2)
     return maze
