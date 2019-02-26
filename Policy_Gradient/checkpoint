@@ -1,0 +1,2 @@
+model_checkpoint_path: "D:/code/python/computing project/pg_env2/model288_200/model288.ckpt"
+all_model_checkpoint_paths: "D:/code/python/computing project/pg_env2/model288_200/model288.ckpt"
