@@ -37,11 +37,11 @@ class PolicyGradient:
         if self.output_graph:
             self.merged = tf.summary.merge_all()
             self.writer = tf.summary.FileWriter(
-                "D:/code/python/computing project/pg_env2/", self.sess.graph)
+                "/pg_env2/", self.sess.graph)
 
         if self.restore:
             self.saver.restore(
-                self.sess, "D:/code/python/computing project/pg_env2/model288_200/model288.ckpt")
+                self.sess, "/model288.ckpt")
         else:
             self.sess.run(tf.global_variables_initializer())
 
@@ -217,7 +217,7 @@ if __name__ == '__main__':
     noob = TrainingAgent()
     noob.train()
     # save_path = noob.brain.saver.save(
-    #     noob.brain.sess, "D:/code/python/computing project/pg_env2/model288_300/model288.ckpt")
+    #     noob.brain.sess, "/model288.ckpt")
     # print("Save to path: ", save_path)
     success = noob.train_episode - noob.num_fail
     print('fails:', noob.num_fail)
