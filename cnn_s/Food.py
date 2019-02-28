@@ -3,7 +3,7 @@ class food:
         self.status = status
         self.status_s = status
         self.pos = pos
-        self.reward = 10
+        self.reward = 1000
         self.reward_s = self.reward
         self.is_visited = False
 
